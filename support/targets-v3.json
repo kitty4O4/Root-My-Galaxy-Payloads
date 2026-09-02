@@ -1,10 +1,15 @@
 {
-  "payloadId": "m14-SM-M145FXXSCDZE1",
-  "displayName": "Galaxy M14 (SM-M145F) | Kernel 5.15.180",
-  "models": ["SM-M145F"],
-  "kernelVersions": ["5.15.180"],
-  "exploit": {
-    "url": "https://raw.githubusercontent.com/kitty4o4/Root-My-Galaxy-Payloads/main/artifacts/m14-SM-M145FXXSCDZE1/cve-2026-43499-app.so",
-    "size": 0
-  }
+  "schemaVersion": 3,
+  "payloads": [
+    {
+      "payloadId": "m14-SM-M145FXXSCDZE1",
+      "displayName": "Galaxy M14 (SM-M145F) | Kernel 5.15.180",
+      "models": ["SM-M145F"],
+      "kernelVersions": ["5.15.180"],
+      "exploit": {
+        "url": "https://raw.githubusercontent.com/kitty4o4/Root-My-Galaxy-Payloads/main/artifacts/m14-SM-M145FXXSCDZE1/cve-2026-43499-app.so",
+        "size": 0
+      }
+    }
+  ]
 }
