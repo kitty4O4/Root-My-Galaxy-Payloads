@@ -49,9 +49,7 @@
     {
       "payloadId": "pa2q-S9360ZCSCCZG1",
       "displayName": "Galaxy S25+ | Kernel 6.6.98",
-      "models": [
-        "SM-S9360"
-      ],
+      "models": ["SM-S9360"],
       "kernelVersions": ["6.6.98"],
       "exploit": {
         "url": "https://raw.githubusercontent.com/BuSung-dev/Root-My-Galaxy-Payloads/main/artifacts/pa2q-S9360ZCSCCZG1/cve-2026-43499-app.so",
@@ -65,9 +63,7 @@
     {
       "payloadId": "psq-S9370ZCS9CZG1",
       "displayName": "Galaxy S25 Edge | Kernel 6.6.98",
-      "models": [
-        "SM-S9370"
-      ],
+      "models": ["SM-S9370"],
       "kernelVersions": ["6.6.98"],
       "exploit": {
         "url": "https://raw.githubusercontent.com/BuSung-dev/Root-My-Galaxy-Payloads/main/artifacts/psq-S9370ZCS9CZG1/cve-2026-43499-app.so",
@@ -137,12 +133,8 @@
     {
       "payloadId": "e3q-S928BXXS6DZF2",
       "displayName": "Galaxy S24 Ultra (International) | Kernel 6.1.145",
-      "models": [
-        "SM-S928B"
-      ],
-      "kernelVersions": [
-        "6.1.145"
-      ],
+      "models": ["SM-S928B"],
+      "kernelVersions": ["6.1.145"],
       "exploit": {
         "url": "https://raw.githubusercontent.com/BuSung-dev/Root-My-Galaxy-Payloads/main/artifacts/e3q-S928BXXS6DZF2/cve-2026-43499-app.so",
         "size": 104128
@@ -282,6 +274,20 @@
         "url": "https://raw.githubusercontent.com/BuSung-dev/Root-My-Galaxy-Payloads/main/kernelsu/ksud-dm1q-S911U1UES6DYI3-kdp",
         "size": 4758792
       }
+    },
+    {
+      "payloadId": "m14-SM-M145FXXU3CXE6",
+      "displayName": "Galaxy M14 (SM-M145F) | Kernel 5.15.123",
+      "models": ["SM-M145F"],
+      "kernelVersions": ["5.15.123"],
+      "exploit": {
+        "url": "https://raw.githubusercontent.com/kitty4o4/Root-My-Galaxy-Payloads/main/artifacts/m14-SM-M145FXXU3CXE6/cve-2026-43499-app.so",
+        "size": 0
+      },
+      "kernelsu": {
+        "url": "https://raw.githubusercontent.com/kitty4o4/Root-My-Galaxy-Payloads/main/kernelsu/ksud-m14-SM-M145FXXU3CXE6-kdp",
+        "size": 0
+      }
     }
   ]
-}
+    }
