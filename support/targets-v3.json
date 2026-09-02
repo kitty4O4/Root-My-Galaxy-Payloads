@@ -276,16 +276,16 @@
       }
     },
     {
-      "payloadId": "m14-SM-M145FXXU3CXE6",
-      "displayName": "Galaxy M14 (SM-M145F) | Kernel 5.15.123",
+      "payloadId": "m14-SM-M145FXXSCDZE1",
+      "displayName": "Galaxy M14 (SM-M145F) | Kernel 5.15.180",
       "models": ["SM-M145F"],
-      "kernelVersions": ["5.15.123"],
+      "kernelVersions": ["5.15.180"],
       "exploit": {
-        "url": "https://raw.githubusercontent.com/kitty4o4/Root-My-Galaxy-Payloads/main/artifacts/m14-SM-M145FXXU3CXE6/cve-2026-43499-app.so",
+        "url": "https://raw.githubusercontent.com/kitty4o4/Root-My-Galaxy-Payloads/main/artifacts/m14-SM-M145FXXSCDZE1/cve-2026-43499-app.so",
         "size": 0
       },
       "kernelsu": {
-        "url": "https://raw.githubusercontent.com/kitty4o4/Root-My-Galaxy-Payloads/main/kernelsu/ksud-m14-SM-M145FXXU3CXE6-kdp",
+        "url": "https://raw.githubusercontent.com/kitty4o4/Root-My-Galaxy-Payloads/main/kernelsu/ksud-m14-SM-M145FXXSCDZE1-kdp",
         "size": 0
       }
     }
