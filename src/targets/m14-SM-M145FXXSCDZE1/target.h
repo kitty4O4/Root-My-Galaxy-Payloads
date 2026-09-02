@@ -1,6 +1,6 @@
 #define TARGET_MODEL "SM-M145F"
-#define TARGET_FIRMWARE "M145FXXU3CXE6"
-#define TARGET_KERNEL_VERSION "5.15.123"
+#define TARGET_FIRMWARE "M145FXXSCDZE1"
+#define TARGET_KERNEL_VERSION "5.15.180"
 
 #define OFFSET_commit_creds 0x18b654
 #define OFFSET_prepare_kernel_cred 0x18a3f0
