@@ -165,7 +165,6 @@
 #define FAKE_TASK_PI_WAITERS_OFF    0x898
 #define FAKE_TASK_PI_TOP_TASK_OFF   0x8a8
 #define FAKE_TASK_PI_BLOCKED_ON_OFF 0x8b0
-#define FAKE_TASK_PRIO               130
 
 // ========== SLIDE BANK OFFSETS ==========
 #define SLIDE_BANK_SLOTS           4
@@ -190,6 +189,23 @@
 #define SLIDE_NFULNL_LOGGER_NAME_IMAGE            0
 #define SLIDE_RANDOM_TABLE_BOOT_ID_DATA_PTR_IMAGE 0
 #define SLIDE_SYSCTL_BOOTID_IMAGE                 0
+
+// ========== P0 FINGERPRINT DEFINITIONS ==========
+#define P0_FINGERPRINT_WORDS 4
+#define P0_FINGERPRINT { 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
+
+static const uint64_t p0_fingerprint_offsets[P0_FINGERPRINT_WORDS] = {
+    0x0000, 0x0008, 0x0010, 0x0018
+};
+
+struct p0_fingerprint {
+    uint64_t words[P0_FINGERPRINT_WORDS];
+    uint64_t slide;
+};
+
+static const struct p0_fingerprint p0_fingerprints[] = {
+    { .words = P0_FINGERPRINT, .slide = 0x00000000 }
+};
 
 // ========== BUILD VARIANT ==========
 #define BUILD_VARIANT_LABEL     "user"
