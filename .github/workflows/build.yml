@@ -1,0 +1,163 @@
+name: Build M14 Payload
+
+on:
+  push:
+    paths:
+      - 'src/targets/m14-SM-M145FXXSCDZE1/**'
+      - 'Makefile'
+      - 'src/**'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Target device profile'
+        required: false
+        default: 'm14-SM-M145FXXSCDZE1'
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [m14-SM-M145FXXSCDZE1]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Android NDK
+        uses: android-actions/setup-android@v3
+        with:
+          ndk: true
+          ndk-version: '28.2.13676358'
+          cmake: true
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make gcc g++
+
+      - name: Set environment variables
+        run: |
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> $GITHUB_ENV
+          echo "NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> $GITHUB_ENV
+          echo "PATH=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Build exploit payload
+        id: build
+        run: |
+          echo "Building target: ${{ matrix.target }}"
+          echo "Using NDK: $ANDROID_NDK_HOME"
+          make TARGET=${{ matrix.target }} ANDROID_NDK_HOME=$ANDROID_NDK_HOME -j$(nproc)
+          echo "Build completed successfully"
+
+      - name: List build output
+        run: |
+          echo "=== Build directory contents ==="
+          ls -la build/${{ matrix.target }}/ || echo "Build directory not found"
+          echo "File sizes:"
+          if [ -f "build/${{ matrix.target }}/cve-2026-43499" ]; then
+            echo "cve-2026-43499: $(stat -c%s "build/${{ matrix.target }}/cve-2026-43499") bytes"
+          fi
+          if [ -f "build/${{ matrix.target }}/cve-2026-43499-app.so" ]; then
+            echo "cve-2026-43499-app.so: $(stat -c%s "build/${{ matrix.target }}/cve-2026-43499-app.so") bytes"
+          fi
+          if [ -f "build/${{ matrix.target }}/cve-2026-43499-root" ]; then
+            echo "cve-2026-43499-root: $(stat -c%s "build/${{ matrix.target }}/cve-2026-43499-root") bytes"
+          fi
+
+      - name: Build KernelSU if source exists
+        id: kernelsu
+        run: |
+          if [ -f "kernelsu/Makefile" ] && [ -d "kernelsu" ]; then
+            echo "KernelSU source found, building..."
+            cd kernelsu
+            make TARGET=${{ matrix.target }} ANDROID_NDK_HOME=$ANDROID_NDK_HOME
+            cd ..
+            echo "kernelsu_built=true" >> $GITHUB_OUTPUT
+            echo "✅ KernelSU built successfully"
+          else
+            echo "kernelsu_built=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ KernelSU source not found, skipping build"
+          fi
+
+      - name: Upload KernelSU artifact (if built)
+        if: steps.kernelsu.outputs.kernelsu_built == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: m14-kernelsu
+          path: |
+            kernelsu/ksud-*.kdp
+          retention-days: 90
+          if-no-files-found: warn
+
+      - name: Upload main payload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: m14-payload-${{ matrix.target }}
+          path: |
+            build/${{ matrix.target }}/
+          retention-days: 90
+          compression-level: 0
+
+      - name: Upload exploit .so (for feed)
+        uses: actions/upload-artifact@v4
+        with:
+          name: m14-exploit-so
+          path: |
+            build/${{ matrix.target }}/cve-2026-43499-app.so
+          retention-days: 90
+
+      - name: Upload root helper (for feed)
+        uses: actions/upload-artifact@v4
+        with:
+          name: m14-root-helper
+          path: |
+            build/${{ matrix.target }}/cve-2026-43499-root
+          retention-days: 90
+
+      - name: Upload standalone exploit
+        uses: actions/upload-artifact@v4
+        with:
+          name: m14-standalone-exploit
+          path: |
+            build/${{ matrix.target }}/cve-2026-43499
+          retention-days: 90
+
+      - name: Calculate sizes for target-v3.json
+        id: sizes
+        run: |
+          EXPLOIT_SO="build/${{ matrix.target }}/cve-2026-43499-app.so"
+          EXPLOIT_ROOT="build/${{ matrix.target }}/cve-2026-43499-root"
+          
+          if [ -f "$EXPLOIT_SO" ]; then
+            EXPLOIT_SIZE=$(stat -c%s "$EXPLOIT_SO")
+            echo "exploit_size=$EXPLOIT_SIZE" >> $GITHUB_OUTPUT
+            echo "✅ cve-2026-43499-app.so: $EXPLOIT_SIZE bytes"
+          else
+            echo "exploit_size=0" >> $GITHUB_OUTPUT
+            echo "❌ cve-2026-43499-app.so not found"
+          fi
+          
+          if [ -f "$EXPLOIT_ROOT" ]; then
+            ROOT_SIZE=$(stat -c%s "$EXPLOIT_ROOT")
+            echo "root_size=$ROOT_SIZE" >> $GITHUB_OUTPUT
+            echo "✅ cve-2026-43499-root: $ROOT_SIZE bytes"
+          fi
+
+      - name: Generate build summary
+        run: |
+          echo "## Build Summary for M14" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| File | Size | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| cve-2026-43499 (standalone) | $([ -f "build/${{ matrix.target }}/cve-2026-43499" ] && echo "$(stat -c%s "build/${{ matrix.target }}/cve-2026-43499") bytes" || echo "N/A") | $([ -f "build/${{ matrix.target }}/cve-2026-43499" ] && echo "✅" || echo "❌") |" >> $GITHUB_STEP_SUMMARY
+          echo "| cve-2026-43499-app.so | $([ -f "build/${{ matrix.target }}/cve-2026-43499-app.so" ] && echo "$(stat -c%s "build/${{ matrix.target }}/cve-2026-43499-app.so") bytes" || echo "N/A") | $([ -f "build/${{ matrix.target }}/cve-2026-43499-app.so" ] && echo "✅" || echo "❌") |" >> $GITHUB_STEP_SUMMARY
+          echo "| cve-2026-43499-root | $([ -f "build/${{ matrix.target }}/cve-2026-43499-root" ] && echo "$(stat -c%s "build/${{ matrix.target }}/cve-2026-43499-root") bytes" || echo "N/A") | $([ -f "build/${{ matrix.target }}/cve-2026-43499-root" ] && echo "✅" || echo "❌") |" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.kernelsu.outputs.kernelsu_built }}" == "true" ]; then
+            KSU_SIZE=$(stat -c%s "kernelsu/ksud-${{ matrix.target }}-kdp" 2>/dev/null || echo "N/A")
+            echo "| KernelSU | $KSU_SIZE | ✅ |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| KernelSU | N/A | ℹ️ Skipped |" >> $GITHUB_STEP_SUMMARY
+          fi
