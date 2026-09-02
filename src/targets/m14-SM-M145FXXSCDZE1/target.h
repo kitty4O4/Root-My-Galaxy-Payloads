@@ -51,6 +51,9 @@
   0x1c0000ULL, 0x1c8000ULL, 0x1d0000ULL, 0x1d8000ULL, \
   0x1e0000ULL, 0x1e8000ULL, 0x1f0000ULL, 0x1f8000ULL
 
+// ========== HEADERS ==========
+#include <stdint.h>
+
 // ========== DEVICE INFO ==========
 #define TARGET_MODEL "SM-M145F"
 #define TARGET_FIRMWARE "M145FXXSCDZE1"
