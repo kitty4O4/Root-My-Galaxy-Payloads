@@ -67,31 +67,6 @@ jobs:
             echo "cve-2026-43499-root: $(stat -c%s "build/${{ matrix.target }}/cve-2026-43499-root") bytes"
           fi
 
-      - name: Build KernelSU if source exists
-        id: build_kernelsu
-        run: |
-          if [ -f "kernelsu/Makefile" ] && [ -d "kernelsu" ]; then
-            echo "KernelSU source found, building..."
-            cd kernelsu
-            make TARGET=${{ matrix.target }} ANDROID_NDK_HOME=$ANDROID_NDK_HOME
-            cd ..
-            echo "kernelsu_built=true" >> $GITHUB_OUTPUT
-            echo "✅ KernelSU built successfully"
-          else
-            echo "kernelsu_built=false" >> $GITHUB_OUTPUT
-            echo "ℹ️ KernelSU source not found, skipping build"
-          fi
-
-      - name: Upload KernelSU artifact (if built)
-        if: steps.build_kernelsu.outputs.kernelsu_built == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: m14-kernelsu
-          path: |
-            kernelsu/ksud-*.kdp
-          retention-days: 90
-          if-no-files-found: warn
-
       - name: Upload main payload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -156,9 +131,3 @@ jobs:
           echo "| cve-2026-43499 (standalone) | $([ -f "build/${{ matrix.target }}/cve-2026-43499" ] && echo "$(stat -c%s "build/${{ matrix.target }}/cve-2026-43499") bytes" || echo "N/A") | $([ -f "build/${{ matrix.target }}/cve-2026-43499" ] && echo "✅" || echo "❌") |" >> $GITHUB_STEP_SUMMARY
           echo "| cve-2026-43499-app.so | $([ -f "build/${{ matrix.target }}/cve-2026-43499-app.so" ] && echo "$(stat -c%s "build/${{ matrix.target }}/cve-2026-43499-app.so") bytes" || echo "N/A") | $([ -f "build/${{ matrix.target }}/cve-2026-43499-app.so" ] && echo "✅" || echo "❌") |" >> $GITHUB_STEP_SUMMARY
           echo "| cve-2026-43499-root | $([ -f "build/${{ matrix.target }}/cve-2026-43499-root" ] && echo "$(stat -c%s "build/${{ matrix.target }}/cve-2026-43499-root") bytes" || echo "N/A") | $([ -f "build/${{ matrix.target }}/cve-2026-43499-root" ] && echo "✅" || echo "❌") |" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ steps.build_kernelsu.outputs.kernelsu_built }}" == "true" ]; then
-            KSU_SIZE=$(stat -c%s "kernelsu/ksud-${{ matrix.target }}-kdp" 2>/dev/null || echo "N/A")
-            echo "| KernelSU | $KSU_SIZE | ✅ |" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "| KernelSU | N/A | ℹ️ Skipped |" >> $GITHUB_STEP_SUMMARY
-          fi
