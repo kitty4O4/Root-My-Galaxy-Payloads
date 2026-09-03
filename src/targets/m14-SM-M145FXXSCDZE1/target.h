@@ -51,9 +51,6 @@
   0x1c0000ULL, 0x1c8000ULL, 0x1d0000ULL, 0x1d8000ULL, \
   0x1e0000ULL, 0x1e8000ULL, 0x1f0000ULL, 0x1f8000ULL
 
-// ========== HEADERS ==========
-#include <stdint.h>
-
 // ========== DEVICE INFO ==========
 #define TARGET_MODEL "SM-M145F"
 #define TARGET_FIRMWARE "M145FXXSCDZE1"
@@ -197,13 +194,13 @@
 #define P0_FINGERPRINT_WORDS 4
 #define P0_FINGERPRINT { 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
 
-static const uint64_t p0_fingerprint_offsets[P0_FINGERPRINT_WORDS] = {
+static const unsigned long long p0_fingerprint_offsets[P0_FINGERPRINT_WORDS] = {
     0x0000, 0x0008, 0x0010, 0x0018
 };
 
 struct p0_fingerprint {
-    uint64_t words[P0_FINGERPRINT_WORDS];
-    uint64_t slide;
+    unsigned long long words[P0_FINGERPRINT_WORDS];
+    unsigned long long slide;
 };
 
 static const struct p0_fingerprint p0_fingerprints[] = {
