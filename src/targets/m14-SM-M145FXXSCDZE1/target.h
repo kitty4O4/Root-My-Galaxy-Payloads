@@ -39,7 +39,7 @@
 
 /* File operations - splice read and seek */
 #define NOOP_LLSEEK_OFF                           0xffffffc008556884
-#define GENERIC_FILE_SPLICE_READ_OFF              0xffffffc0085ca2dc
+#define COPY_SPLICE_READ_OFF                      0xffffffc0085ca2dc
 #define CONFIGFS_READ_ITER_OFF                    0xffffffc00867f0cc
 #define CONFIGFS_BIN_WRITE_ITER_OFF               0xffffffc00867fbf0
 
@@ -76,6 +76,7 @@
 /* Boot ID sysctl for slide detection */
 #define SYSCTL_BOOTID_OFF                         0xffffffc00af4c3a1
 #define SLIDE_SYSCTL_BOOTID_OFF                   0xffffffc00af4c3a1
+#define SLIDE_BOOTID_POINTER_OFF                  0xffffffc00af4c3a1
 
 /* ============================================================================
  * CFI JUMP TABLE OFFSETS (Control Flow Integrity Protection)
@@ -92,7 +93,7 @@
 #define NOOP_LLSEEK_CFI_JT                        0xffffffc009797250
 #define CONFIGFS_READ_ITER_CFI_JT                 0xffffffc009799d50
 #define CONFIGFS_BIN_WRITE_ITER_CFI_JT            0xffffffc009799d68
-#define GENERIC_FILE_SPLICE_READ_CFI_JT           0xffffffc00979a0c0
+#define COPY_SPLICE_READ_CFI_JT                   0xffffffc00979a0c0
 
 /* ============================================================================
  * PHYSICAL MEMORY LAYOUT
