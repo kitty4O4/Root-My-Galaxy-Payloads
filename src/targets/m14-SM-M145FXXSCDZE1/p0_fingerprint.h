@@ -2,10 +2,14 @@
 #define P0_FINGERPRINT_H
 
 /*
- * Galaxy M14 4G P0 Fingerprint Table
+ * Galaxy M14 4G (SM-M145F) - P0 Fingerprint Table
  * Used for kernel slide detection and ASLR bypass
  * Build: M145FXXSCDZE1
  * Kernel: 5.15.180-android13-8-31192385-abM145FXXSCDZE1
+ * 
+ * Generated from raw kernel analysis
+ * Slide range: 0x000000 to 0x1f0000 (0x10000 step)
+ * Fingerprints: 32 entries, 8 qwords per entry
  */
 
 #define P0_FINGERPRINT_COUNT 32
