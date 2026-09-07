@@ -11,6 +11,7 @@
  * Symbol offsets extracted from vmlinux.elf
  * ELF Base: 0xffffffc000000000
  * Kernel Size: 46 MB (0x2dd2a00 bytes)
+ * Platform: Qualcomm Snapdragon
  */
 
 /* ============================================================================
@@ -254,12 +255,14 @@
 
 /* ============================================================================
  * PLATFORM-SPECIFIC SETTINGS
- * Samsung Exynos platform configuration
+ * Qualcomm Snapdragon platform configuration
  * ============================================================================ */
 
 #define SAMSUNG_PLATFORM                          1
-#define SAMSUNG_EXYNOS                            1
-#define SAMSUNG_S5PV210                           0
+#define SNAPDRAGON_PLATFORM                       1
+#define QUALCOMM_SNAPDRAGON                       1
+#define SNAPDRAGON_GEN                            "Gen 1"
+
 #define SELINUX_ENFORCED_DEFAULT                  1
 #define SELINUX_PERMISSIVE_DEFAULT                0
 #define SAMSUNG_RKP_ENABLED                       0
