@@ -1,16 +1,24 @@
 {
+  "profileId": "m14-M145FXXSCDZE1",
+  "manufacturer": "samsung",
   "model": "SM-M145F",
-  "buildId": "M145FXXSCDZE1",
-  "displayName": "Galaxy M14 4G",
+  "device": "m14",
   "kernelRelease": "5.15.180-android13-8-31192385-abM145FXXSCDZE1",
-  "kernelVersion": "Linux version 5.15.180-android13-8-31192385-abM145FXXSCDZE1 (build-user@build-host) (Android (8508608, based on r450784e) clang version 14.0.7) #1 SMP PREEMPT Thu May 28 08:57:55 UTC 2026",
-  "androidVersion": "13",
-  "sdkVersion": "33",
-  "abiList": ["arm64-v8a"],
-  "artifacts": {
-    "payload": "cve-2026-43499-app.so",
-    "kernelSU": "android13-5.15_kernelsu.ko"
+  "kernelVersion": "Linux version 5.15.180-android13-8-31192385-abM145FXXSCDZE1 (build-user@build-host) (Android (8508608, based on r450784e) clang version 14.0.7 (https://android.googlesource.com/toolchain/llvm-project 4c603efb0cca074e9238af8b4106c30add4418f6), LLD 14.0.7) #1 SMP PREEMPT Thu May 28 08:57:55 UTC 2026",
+  "kernelBuildVersion": "#1 SMP PREEMPT Thu May 28 08:57:55 UTC 2026",
+  "buildDisplay": "TP1A.220624.014.M145FXXSCDZE1",
+  "buildFingerprint": "samsung/m14/m14:13/TP1A.220624.014/M145FXXSCDZE1:user/release-keys",
+  "sdk": 33,
+  "abi": "arm64-v8a",
+  "pageSize": 4096,
+  "exploit": {
+    "url": "https://raw.githubusercontent.com/BuSung-dev/Root-My-Galaxy-Payloads/main/artifacts/m14-M145FXXSCDZE1/cve-2026-43499-app.so",
+    "size": 104128
   },
-  "verified": false,
-  "notes": "M14 4G 5.15.180 kernel, Snapdragon platform, no embedded BTF, CFI-protected, device testing pending"
+  "kernelsu": {
+    "url": "https://raw.githubusercontent.com/BuSung-dev/Root-My-Galaxy-Payloads/main/kernelsu/ksud-m14-M145FXXSCDZE1-kdp",
+    "size": 4765336,
+    "kmi": "android13-5.15",
+    "managerPackage": "me.weishu.kernelsu"
+  }
 }
