@@ -336,7 +336,7 @@
  * TRACE CONFIGURATION
  * ============================================================================ */
 
-#define SLIDE_TRACEFS_EVENT_ID                    106
+#define SLIDE_TRACEFS_EVENT_ID                    108
 #define SLIDE_TRACEFS_WORKER_CALLER_OFF           0x8308c30UL
 #define SLIDE_PSELECT_WORD_SHIFT                  0
 
