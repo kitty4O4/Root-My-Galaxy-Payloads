@@ -229,6 +229,47 @@
 #define SCRATCH_OFF                               0x800UL
 #define FAKE_TASK_OFF                             0x900UL
 
+/* ============================================================================
+ * FAKE TASK STRUCTURE OFFSETS
+ * ============================================================================ */
+
+#define FAKE_TASK_USAGE_OFF                       TASK_STRUCT_USAGE
+#define FAKE_TASK_PRIO_OFF                        TASK_STRUCT_PRIO
+#define FAKE_TASK_NORMAL_PRIO_OFF                 TASK_STRUCT_NORMAL_PRIO
+#define FAKE_TASK_PI_LOCK_OFF                     TASK_STRUCT_PI_LOCK
+#define FAKE_TASK_PI_WAITERS_OFF                  TASK_STRUCT_PI_WAITERS
+#define FAKE_TASK_PI_TOP_TASK_OFF                 TASK_STRUCT_PI_TOP_TASK
+#define FAKE_TASK_PI_BLOCKED_ON_OFF               TASK_STRUCT_PI_BLOCKED_ON
+#define FAKE_TASK_TASK_GROUP_OFF                  TASK_STRUCT_SCHED_TASK_GROUP
+
+/* ============================================================================
+ * RED-BLACK TREE OFFSETS
+ * ============================================================================ */
+
+#define RIGHT_OFF                                 0x800UL
+
+/* ============================================================================
+ * CONFIGFS STRUCTURE OFFSETS
+ * ============================================================================ */
+
+#define CFG_BIN_BUFFER_OFF                        0x850UL
+#define CFG_BIN_BUFFER_SIZE_OFF                   0x858UL
+#define CFG_CB_MAX_SIZE_OFF                       0x85cUL
+#define CFG_PAGE_OFF                              0xa00UL
+
+/* ============================================================================
+ * PIPE CONSTANTS
+ * ============================================================================ */
+
+#define PIPE_BUFFER_SLOTS                         16
+#define PIPE_BUF_FLAG_CAN_MERGE                   0x04UL
+
+/* ============================================================================
+ * SLIDE PSELECT CONFIGURATION
+ * ============================================================================ */
+
+#define SLIDE_PSELECT_NFDS                        320
+
 /* Root UMH configuration */
 #define ROOT_UMH_PATH                             "/system/bin/app_process64"
 #define ROOT_UMH_WORK_OFF                         0x20UL
