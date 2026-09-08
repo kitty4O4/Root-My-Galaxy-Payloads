@@ -255,6 +255,7 @@
 #define CFG_BIN_BUFFER_OFF                        0x850UL
 #define CFG_BIN_BUFFER_SIZE_OFF                   0x858UL
 #define CFG_CB_MAX_SIZE_OFF                       0x85cUL
+#define CFG_NEEDS_READ_FILL_OFF                   0x860UL
 #define CFG_PAGE_OFF                              0xa00UL
 
 /* ============================================================================
